@@ -109,18 +109,20 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO subcategory (name, categoryId) VALUES ('Thưởng', 2);");    // id = 4
 
         // Transactions (5 chi tiêu, 5 thu nhập)
-        // Transactions (5 chi tiêu, 5 thu nhập)
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn sáng', 30000, 'Phở bò', '14/05/2025', 1, 1);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn trưa', 50000, 'Cơm tấm', '14/05/2025', 1, 1);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Grab', 40000, 'Đi làm', '13/05/2025', 1, 2);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Xe buýt', 7000, 'Đi học', '12/05/2025', 1, 2);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn vặt', 20000, 'Trà sữa', '11/05/2025', 1, 1);");
+        // Chi tiêu
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn sáng', 35000, 'Bánh mì ốp la', '14/08/2025', 1, 1);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn trưa', 60000, 'Bún chả', '14/08/2025', 1, 1);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Grab', 45000, 'Đi làm', '13/08/2025', 1, 2);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Xe buýt', 7000, 'Đi học', '12/08/2025', 1, 2);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn vặt', 25000, 'Cà phê sữa đá', '11/08/2025', 1, 1);");
 
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Lương tháng 5', 15000000, 'Công ty ABC', '01/05/2025', 2, 3);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Lương freelance', 5000000, 'Dự án web', '03/05/2025', 2, 3);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Thưởng hiệu suất', 2000000, 'Tháng 4', '05/05/2025', 2, 4);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Thưởng lễ', 1000000, '30/4-1/5', '06/05/2025', 2, 4);");
-        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Lương part-time', 3000000, 'Trợ giảng', '07/05/2025', 2, 3);");
+        // Thu nhập
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Lương tháng 8', 16000000, 'Công ty XYZ', '01/08/2025', 2, 3);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Dự án freelance', 4500000, 'Thiết kế app', '03/08/2025', 2, 3);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Thưởng quý', 3000000, 'Hiệu suất Q2', '05/08/2025', 2, 4);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Thưởng lễ', 1200000, 'Quốc khánh 2/9', '06/08/2025', 2, 4);");
+        db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Lương part-time', 2800000, 'Gia sư toán', '07/08/2025', 2, 3);");
+
     }
 
 }

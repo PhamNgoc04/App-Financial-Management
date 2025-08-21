@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.RegisterActivity"
-    android:background="@drawable/bg_white">
+    android:background="@drawable/bg_gradient"
+    >
 
     <ImageView
         android:id="@+id/imageView4"
@@ -16,7 +17,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/coin_pig" />
+        app:srcCompat="@drawable/logo_coin_pig_app_2" />
 
     <TextView
         android:id="@+id/btnRegisterMain"

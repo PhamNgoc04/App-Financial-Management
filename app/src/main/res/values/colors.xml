@@ -9,4 +9,8 @@
     <color name="green_text">#33CC33</color>
     <color name="green_bg">#5ACA5A</color>
     <color name="navy_bg">#003399</color>"
+    <color name="background_gray">#F0F2F5</color>
+    <color name="primary_color">#4CAF50</color>
+    <color name="dark_text">#212121</color>
+    <color name="gray_text_2">#757575</color>
 </resources>
