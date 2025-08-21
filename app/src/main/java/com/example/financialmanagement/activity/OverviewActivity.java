@@ -22,8 +22,11 @@ import com.example.financialmanagement.tmp.TransactionDisplay;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class OverviewActivity extends AppCompatActivity {
+
+    private String selectedDate = null;
 
     private Button btnSeeAllWallet, btnSeeReport, btnSeeAllTransaction;
     private TextView tvTotalBalance, tvWallet1, tvBalanceWallet1, tvWallet2, tvBalanceWallet2;
@@ -39,12 +42,45 @@ public class OverviewActivity extends AppCompatActivity {
 
     int userId;
 
+//    @Override
+//    protected void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_overview);
+//
+//        initViews();
+//
+//        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+//        userId = sharedPreferences.getInt("userId", -1);
+//
+//        if (userId == -1) {
+//            Toast.makeText(this, "Không tìm thấy người dùng đang đăng nhập!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        loadWalletData();
+//        loadIncomeExpenseData();
+//        loadRecentTransactions();
+//        setupEventListeners();
+//    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_overview);
 
+        // Khởi tạo tất cả các View ngay trong onCreate
         initViews();
+        setupEventListeners();
+
+        // Di chuyển logic tải dữ liệu sang onResume để nó chạy mỗi khi Activity hiển thị
+        // loadWalletData(); // Xóa hoặc comment dòng này
+        // loadIncomeExpenseData(); // Xóa hoặc comment dòng này
+        // loadRecentTransactions(); // Xóa hoặc comment dòng này
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         userId = sharedPreferences.getInt("userId", -1);
@@ -54,10 +90,10 @@ public class OverviewActivity extends AppCompatActivity {
             return;
         }
 
+        // Tải lại dữ liệu mỗi khi Activity được tiếp tục
         loadWalletData();
         loadIncomeExpenseData();
         loadRecentTransactions();
-        setupEventListeners();
     }
 
     private void initViews() {
@@ -146,20 +182,38 @@ public class OverviewActivity extends AppCompatActivity {
         DBHelper dbHelper = new DBHelper(this);
         SQLiteDatabase db = dbHelper.getReadableDatabase();
 
-        Cursor cursor = db.rawQuery(
+        // Sử dụng StringBuilder để xây dựng câu truy vấn
+        StringBuilder query = new StringBuilder(
                 "SELECT t.id, t.name, t.amount, t.note, t.date, t.walletId, t.subcategoryId, " +
-                        "s.name, c.id FROM transactions t " +
+                        "s.name, c.id, t.timestamp FROM transactions t " +
                         "JOIN subcategory s ON t.subcategoryId = s.id " +
                         "JOIN category c ON s.categoryId = c.id " +
                         "JOIN wallet w ON t.walletId = w.id " +
-                        "WHERE w.userId = ? ORDER BY t.date DESC LIMIT 10",
-                new String[]{String.valueOf(userId)}
+                        "WHERE w.userId = ?"
         );
+        List<String> args = new ArrayList<>();
+        args.add(String.valueOf(userId));
+
+        // Thêm điều kiện lọc nếu có ngày được chọn
+        if (selectedDate != null) {
+            query.append(" AND t.date = ?");
+            args.add(selectedDate);
+        }
+
+        // Sắp xếp theo timestamp để có thứ tự chính xác (cần thêm cột này vào DB)
+        query.append(" ORDER BY substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2) DESC, t.timestamp DESC");
+        Cursor cursor = db.rawQuery(query.toString(), args.toArray(new String[0]));
 
         while (cursor.moveToNext()) {
             Transaction transaction = new Transaction(
-                    cursor.getInt(0), cursor.getString(1), cursor.getDouble(2),
-                    cursor.getString(3), cursor.getString(4), cursor.getInt(5), cursor.getInt(6)
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getDouble(2),
+                    cursor.getString(3),
+                    cursor.getString(4),
+                    cursor.getLong(cursor.getColumnIndexOrThrow("timestamp")), // Lấy timestamp từ cursor
+                    cursor.getInt(5),
+                    cursor.getInt(6)
             );
             String subcategoryName = cursor.getString(7);
             int categoryId = cursor.getInt(8);

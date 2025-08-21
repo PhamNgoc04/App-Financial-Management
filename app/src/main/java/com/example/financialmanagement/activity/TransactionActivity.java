@@ -103,8 +103,9 @@ public class TransactionActivity extends AppCompatActivity {
         int typeId = rgType.getCheckedRadioButtonId();
 
         StringBuilder query = new StringBuilder(
-                "SELECT t.*, s.name AS subcategoryName, s.categoryId " +
-                        "FROM transactions t JOIN subcategory s ON t.subcategoryId = s.id " +
+                "SELECT t.id, t.name, t.amount, t.note, t.date, t.timestamp, t.walletId, t.subcategoryId, " +
+                        "s.name AS subcategoryName, s.categoryId FROM transactions t " + // Thêm t.timestamp
+                        "JOIN subcategory s ON t.subcategoryId = s.id " +
                         "JOIN wallet w ON t.walletId = w.id WHERE w.userId = ?"
         );
 
@@ -137,12 +138,13 @@ public class TransactionActivity extends AppCompatActivity {
             query.append(" AND s.categoryId = 1");
         }
 
-        query.append(" ORDER BY substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2) DESC");
-
+// Sắp xếp theo ngày (chuỗi yyyy-MM-dd) trước, sau đó theo timestamp
+        query.append(" ORDER BY substr(t.date, 7, 4) || '-' || substr(t.date, 4, 2) || '-' || substr(t.date, 1, 2) DESC, t.timestamp DESC");
         try (SQLiteDatabase db = dbHelper.getReadableDatabase();
              Cursor cursor = db.rawQuery(query.toString(), args.toArray(new String[0]))) {
 
             transactionList.clear();
+            // Sửa thành
             while (cursor.moveToNext()) {
                 Transaction t = new Transaction(
                         cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -150,6 +152,7 @@ public class TransactionActivity extends AppCompatActivity {
                         cursor.getDouble(cursor.getColumnIndexOrThrow("amount")),
                         cursor.getString(cursor.getColumnIndexOrThrow("note")),
                         cursor.getString(cursor.getColumnIndexOrThrow("date")),
+                        cursor.getLong(cursor.getColumnIndexOrThrow("timestamp")), // Lấy timestamp từ cursor
                         cursor.getInt(cursor.getColumnIndexOrThrow("walletId")),
                         cursor.getInt(cursor.getColumnIndexOrThrow("subcategoryId"))
                 );

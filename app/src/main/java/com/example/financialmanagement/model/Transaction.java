@@ -6,8 +6,20 @@ public class Transaction {
     private double amount;
     private String note;
     private String date;
+    private long timestamp;
     private int walletId;
     private int subcategoryId;
+
+    public Transaction(int id, String name, double amount, String note, String date, long timestamp, int walletId, int subcategoryId) {
+        this.id = id;
+        this.name = name;
+        this.amount = amount;
+        this.note = note;
+        this.date = date;
+        this.timestamp = timestamp;
+        this.walletId = walletId;
+        this.subcategoryId = subcategoryId;
+    }
 
     public Transaction(int id, String name, double amount, String note, String date, int walletId, int subcategoryId) {
         this.id = id;
@@ -17,6 +29,14 @@ public class Transaction {
         this.date = date;
         this.walletId = walletId;
         this.subcategoryId = subcategoryId;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getId() {

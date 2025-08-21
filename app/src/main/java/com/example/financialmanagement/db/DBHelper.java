@@ -58,6 +58,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "amount REAL," +
                     "note TEXT," +
                     "date TEXT," +
+                    "timestamp INTEGER," +
                     "walletId INTEGER," +
                     "subcategoryId INTEGER," +
                     "FOREIGN KEY (walletId) REFERENCES " + TABLE_WALLET + "(id) ON DELETE CASCADE," +
@@ -106,6 +107,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("INSERT INTO subcategory (name, categoryId) VALUES ('Đi lại', 1);");    // id = 2
         db.execSQL("INSERT INTO subcategory (name, categoryId) VALUES ('Lương', 2);");     // id = 3
         db.execSQL("INSERT INTO subcategory (name, categoryId) VALUES ('Thưởng', 2);");    // id = 4
+
+        // Transactions (5 chi tiêu, 5 thu nhập)
         // Transactions (5 chi tiêu, 5 thu nhập)
         db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn sáng', 30000, 'Phở bò', '14/05/2025', 1, 1);");
         db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES ('Ăn trưa', 50000, 'Cơm tấm', '14/05/2025', 1, 1);");

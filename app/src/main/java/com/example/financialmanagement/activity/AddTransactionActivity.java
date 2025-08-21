@@ -97,9 +97,10 @@ public class AddTransactionActivity extends AppCompatActivity {
 
         rgType.setOnCheckedChangeListener((group, checkedId) -> loadSubcategories());
 
+        // Thay đổi định dạng để bao gồm giờ, phút và giây
         calendar = Calendar.getInstance();
         sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        edtDate.setText(sdf.format(calendar.getTime()));
+        edtDate.setText(sdf.format(Calendar.getInstance().getTime()));
 
         edtDate.setOnClickListener(v -> {
             int year = calendar.get(Calendar.YEAR);
@@ -108,9 +109,10 @@ public class AddTransactionActivity extends AppCompatActivity {
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, selectedYear, selectedMonth, selectedDay) -> {
                 calendar.set(selectedYear, selectedMonth, selectedDay);
-                edtDate.setText(sdf.format(calendar.getTime()));
-            }, year, month, day);
-
+                // Chỉ hiển thị ngày tháng năm trên giao diện
+                SimpleDateFormat displaySdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                edtDate.setText(displaySdf.format(calendar.getTime()));
+                }, year, month, day);
             datePickerDialog.show();
         });
 
@@ -129,6 +131,8 @@ public class AddTransactionActivity extends AppCompatActivity {
         String amountStr = edtAmount.getText().toString().trim();
         String note = edtNote.getText().toString().trim();
         String date = edtDate.getText().toString().trim();
+        // Lấy timestamp hiện tại (số mili giây từ 1970)
+        long timestamp = System.currentTimeMillis();
 
         // Kiểm tra nhập số tiền
         if (TextUtils.isEmpty(amountStr)) {
@@ -151,16 +155,16 @@ public class AddTransactionActivity extends AppCompatActivity {
             return;
         }
 
-        // Kiểm tra ngày hợp lệ (có thể parse ngày)
-        try {
-            sdf.parse(date);
-        } catch (ParseException e) {
-            Toast.makeText(this, "Ngày không hợp lệ", Toast.LENGTH_SHORT).show();
+        // Kiểm tra và lấy thông tin từ Spinner
+        Object selectedWalletObject = spinnerWallet.getSelectedItem();
+        if (selectedWalletObject == null) {
+            Toast.makeText(this, "Vui lòng chọn ví", Toast.LENGTH_SHORT).show();
             return;
         }
 
         // Kiểm tra chọn ví
         String selectedWallet = (String) spinnerWallet.getSelectedItem();
+
         if (TextUtils.isEmpty(selectedWallet)) {
             Toast.makeText(this, "Vui lòng chọn ví", Toast.LENGTH_SHORT).show();
             return;
@@ -193,8 +197,9 @@ public class AddTransactionActivity extends AppCompatActivity {
             }
 
             // Thêm giao dịch vào bảng transactions
-            db.execSQL("INSERT INTO transactions (name, amount, note, date, walletId, subcategoryId) VALUES (?, ?, ?, ?, ?, ?)",
-                    new Object[]{name, amount, note, date, walletId, subcategoryId});
+            db.execSQL("INSERT INTO transactions (name, amount, note, date, timestamp, walletId, subcategoryId) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    new Object[]{name, amount, note, date, timestamp, walletId, subcategoryId});
+
 
             // Cập nhật số dư ví
             boolean isIncome = rdIncome.isChecked();
