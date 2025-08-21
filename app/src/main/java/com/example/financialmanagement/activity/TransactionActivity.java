@@ -51,8 +51,12 @@ public class TransactionActivity extends AppCompatActivity {
 
         setBottomNavListeners();
 
-        loadTotalBalance();
-        loadFilteredTransactions();
+        // Start a background thread to load data
+        new Thread(() -> {
+            // Perform database operations in the background
+            loadTotalBalance();
+            loadFilteredTransactions();
+        }).start();
     }
 
     private void initViews() {

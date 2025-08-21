@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray_bg"
-    tools:context=".activity.OverviewActivity">
+    tools:context=".activity.OverviewActivity"
+    android:layout_marginBottom="20dp">
 
     <ScrollView
         android:id="@+id/scrollView2"
