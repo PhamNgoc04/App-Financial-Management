@@ -95,7 +95,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private void insertSampleData(SQLiteDatabase db) {
         // Dử liệu thử
         // User
-        db.execSQL("INSERT INTO user (username, password) VALUES ('admin', '12345678');");
+        db.execSQL("INSERT INTO user (username, password) VALUES ('admin', 'Matkhaula12345@17');");
         // Wallets (userId = 1)
         db.execSQL("INSERT INTO wallet (name, balance, userId) VALUES ('Tiền mặt', 500000, 1);"); // id = 1
         db.execSQL("INSERT INTO wallet (name, balance, userId) VALUES ('Ngân hàng', 10000000, 1);"); // id = 2

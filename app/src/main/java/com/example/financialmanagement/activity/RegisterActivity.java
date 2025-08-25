@@ -55,10 +55,17 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
-        if (password.length() < 8) {
-            Toast.makeText(this, "Mật khẩu phải có ít nhất 8 ký tự!", Toast.LENGTH_SHORT).show();
+//        if (password.length() < 8) {
+//            Toast.makeText(this, "Mật khẩu phải có ít nhất 8 ký tự!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+
+//         Kiểm tra mật khẩu mạnh
+        if (!isValidPassword(password)) {
+            Toast.makeText(this, "Mật khẩu phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường!", Toast.LENGTH_LONG).show();
             return;
         }
+
 
         SQLiteDatabase db = null;
         try {
@@ -105,6 +112,29 @@ public class RegisterActivity extends AppCompatActivity {
                 db.close();
             }
         }
+    }
+
+    /**
+     * Kiểm tra mật khẩu mạnh
+     * - Ít nhất 8 ký tự
+     * - Có chữ thường
+     * - Có chữ hoa
+     * - Có số
+     */
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8) return false;
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasDigit = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isDigit(c)) hasDigit = true;
+        }
+
+        return hasUpper && hasLower && hasDigit;
     }
 
     private void createDefaultWallets(SQLiteDatabase db, long userId) {

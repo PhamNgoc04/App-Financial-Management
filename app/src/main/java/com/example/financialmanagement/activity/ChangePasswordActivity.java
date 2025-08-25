@@ -44,13 +44,21 @@ public class ChangePasswordActivity extends AppCompatActivity {
                 return;
             }
 
-            if (newPassword.length() < 8) {
-                Toast.makeText(this, "Mật khẩu mới phải có ít nhất 8 ký tự", Toast.LENGTH_SHORT).show();
+            // Kiểm tra mật khẩu mới hợp lệ
+            if (!isValidPassword(newPassword)) {
+                Toast.makeText(this,
+                        "Mật khẩu mới phải có ít nhất 8 ký tự, gồm chữ hoa, chữ thường và số!",
+                        Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (!newPassword.equals(confirmPassword)) {
                 Toast.makeText(this, "Mật khẩu mới không khớp", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (oldPassword.equals(newPassword)) {
+                Toast.makeText(this, "Mật khẩu mới không được trùng với mật khẩu cũ", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -105,5 +113,28 @@ public class ChangePasswordActivity extends AppCompatActivity {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Kiểm tra mật khẩu mạnh
+     * - Ít nhất 8 ký tự
+     * - Có chữ thường
+     * - Có chữ hoa
+     * - Có số
+     */
+    private boolean isValidPassword(String password) {
+        if (password.length() < 8) return false;
+
+        boolean hasUpper = false;
+        boolean hasLower = false;
+        boolean hasDigit = false;
+
+        for (char c : password.toCharArray()) {
+            if (Character.isUpperCase(c)) hasUpper = true;
+            else if (Character.isLowerCase(c)) hasLower = true;
+            else if (Character.isDigit(c)) hasDigit = true;
+        }
+
+        return hasUpper && hasLower && hasDigit;
     }
 }
